@@ -1,5 +1,6 @@
 package com.accolite.course.controller;
 
+import java.util.List;
 import java.util.Optional;
 
 
@@ -19,12 +20,13 @@ import org.springframework.web.bind.annotation.RestController;
 import com.accolite.course.entities.CourseEntity;
 import com.accolite.course.exception.NoContentException;
 import com.accolite.course.models.Course;
+import com.accolite.course.models.MailSender;
 import com.accolite.course.repositories.CourseRepository;
 import com.accolite.course.service.CourseService;
+import com.accolite.course.service.MailService;
 
 @RestController
 @RequestMapping("/course")
-
 public class CourseController {
 
 	@Autowired
@@ -32,10 +34,18 @@ public class CourseController {
 
 	@Autowired
 	private CourseRepository courseRepository;
-
+	
+	@Autowired
+	private MailService Mail;
+	
 	@PostMapping("/save")
 	public ResponseEntity<Course> saveIntocourseItemTable(@RequestBody Course course) {
 		return new ResponseEntity<>(courseService.saveIntocourseItemTable(course), HttpStatus.OK);
+	}
+	
+	@PostMapping("/mail")
+	public  void sendMail(@RequestBody MailSender mailsender) {
+		Mail.sendEmailviaMailSender(mailsender);
 	}
 
 	@GetMapping(path = "{id}")
@@ -51,16 +61,12 @@ public class CourseController {
 
 	}
 	
-	@GetMapping(path = "/location/{location}")
-	public ResponseEntity<Course> fetchRecordFromcourseTable(@PathVariable("location") String location) {
-		Course courseData = null;
-		try {
-			courseData = courseService.fetchCoursesByLocation(location);
-		} catch (NoContentException e) {
-			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-		}
 
-		return new ResponseEntity<>(courseData, HttpStatus.OK);
+	
+	@GetMapping(path = "/location/{location}")
+	public List<CourseEntity> fetchRecordFromcourseTable(@PathVariable("location") String location) throws NoContentException{
+
+		return courseService.fetchCoursesByLocation(location);
 
 	}
 

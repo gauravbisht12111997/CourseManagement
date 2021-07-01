@@ -13,6 +13,5 @@ import com.accolite.course.entities.CourseEntity;
 
 @Repository
 public interface CourseRepository extends CrudRepository<CourseEntity, Long> {
-
-	Optional<CourseEntity> findByLocation(String location);
+	List<CourseEntity> findByLocation(String location);
 }

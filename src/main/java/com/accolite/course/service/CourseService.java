@@ -64,7 +64,7 @@ public class CourseService {
 			name = course.getSkills().get(i).getName();
 
 			Skill skill = new Skill(skillId, name);
-			//skillRepository.save(skill);
+		
 			skillList.add(skill);
 
 		}
@@ -167,13 +167,10 @@ public class CourseService {
 
 	}
 
-	public Course fetchCoursesByLocation(String location) throws NoContentException {
 
-		Optional<CourseEntity> entity = courseRepository.findByLocation(location);
-		if (!entity.isPresent()) {
-			throw new NoContentException(HttpStatus.NO_CONTENT);
-		}
-		return mapEntityToObject(entity.get());
+	public List<CourseEntity> fetchCoursesByLocation(String location) throws NoContentException {
+
+		return courseRepository.findByLocation(location);
 
 	}
 }
